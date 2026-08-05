@@ -6,6 +6,14 @@
   // Variables de control
   let eventCheckCooldown = 0;
   const EVENT_CHECK_INTERVAL = 3;
+
+  // Cooldown para eventos de seguridad (7 días = 1 semana)
+  const SECURITY_EVENT_COOLDOWN_DAYS = 7;
+  window.securityEventCooldowns = window.securityEventCooldowns || {};
+  
+  // Cooldown para eventos positivos (5 días)
+  const POSITIVE_EVENT_COOLDOWN_DAYS = 5;
+  window.positiveEventCooldowns = window.positiveEventCooldowns || {};
   let lastEventId = null;
   let positiveEventCooldown = 0;
   const POSITIVE_EVENT_INTERVAL = 5;
@@ -27,7 +35,15 @@
 
     // Usar SECURITY_EVENTS del archivo events-security.js
     const EVENTS = window.SECURITY_EVENTS || [];
-    const triggeredEvents = EVENTS.filter((ev) => {
+    
+    // Filtrar eventos que no están en cooldown
+    const availableEvents = EVENTS.filter((ev) => {
+      const lastTriggeredDay = window.securityEventCooldowns[ev.id];
+      const daysSinceLastTrigger = lastTriggeredDay ? window.gameState.day - lastTriggeredDay : Infinity;
+      return daysSinceLastTrigger >= SECURITY_EVENT_COOLDOWN_DAYS;
+    });
+    
+    const triggeredEvents = availableEvents.filter((ev) => {
       const effectiveProbability = ev.probability * (1 - reduction);
       return Math.random() < effectiveProbability;
     });
@@ -38,6 +54,10 @@
     const pool = filtered.length > 0 ? filtered : triggeredEvents;
     const event = pool[Math.floor(Math.random() * pool.length)];
     lastEventId = event.id;
+    
+    // Registrar el día en que se disparó este evento
+    window.securityEventCooldowns[event.id] = window.gameState.day;
+    
     openEventModal(event);
   }
 
@@ -53,12 +73,23 @@
 
     // Usar POSITIVE_EVENTS del archivo events-positive.js
     const POSITIVE_EVENTS = window.POSITIVE_EVENTS || [];
-    const triggered = POSITIVE_EVENTS.filter(
+    
+    // Filtrar eventos que no están en cooldown
+    const availableEvents = POSITIVE_EVENTS.filter((ev) => {
+      const lastTriggeredDay = window.positiveEventCooldowns[ev.id];
+      const daysSinceLastTrigger = lastTriggeredDay ? window.gameState.day - lastTriggeredDay : Infinity;
+      return daysSinceLastTrigger >= POSITIVE_EVENT_COOLDOWN_DAYS;
+    });
+    
+    const triggered = availableEvents.filter(
       (ev) => Math.random() < ev.probability,
     );
     if (triggered.length === 0) return;
 
     const event = triggered[Math.floor(Math.random() * triggered.length)];
+    
+    // Registrar el día en que se disparó este evento
+    window.positiveEventCooldowns[event.id] = window.gameState.day;
 
     let gainText = "";
     if (event.type === "money") {

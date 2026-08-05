@@ -334,18 +334,18 @@ body {
    ---- */
 .network-node {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
-    background: #f8fafc;
-    border: 3px solid #334155;
+    background: #ffffff;
+    border: 3px solid #1e293b;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     cursor: grab;
     user-select: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition:
         transform 0.1s,
         box-shadow 0.2s;
@@ -364,7 +364,7 @@ body {
 
 .node-router {
     border-color: #3b82f6;
-    background: #dbeafe;
+    background: #e0f2fe;
 }
 
 .node-switch8,
@@ -372,6 +372,8 @@ body {
 .node-switch24 {
     border-color: #10b981;
     background: #d1fae5;
+    width: 90px;
+    height: 90px;
 }
 
 .node-endpoint {
@@ -395,20 +397,22 @@ body {
 }
 
 .node-name {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     font-weight: bold;
     text-align: center;
     color: #1e293b;
-    max-width: 70px;
+    max-width: 80px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .node-ports {
-    font-size: 0.6rem;
-    color: #64748b;
+    font-size: 0.8rem;
+    color: #1e293b;
     margin-top: 2px;
+    font-weight: bold;
 }
 
 .node-status {
@@ -1057,4 +1061,50 @@ body.submenu-open #workspace {
 .network-node.packets-overloaded .packet-badge {
     background: #ef4444;
     animation: pulse-red 0.8s infinite;
+}
+.node-switch8,
+.node-switch16,
+.node-switch24 {
+    width: 90px;
+    height: 90px;
+}
+
+.node-endpoint {
+    width: 70px;
+    height: 70px;
+}
+
+.node-server {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+
+/* Estilos para los puertos (más visibles) */
+.port-count {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #0f172a;
+}
+
+.port-max {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #0f172a;
+}
+
+/* Tooltip al pasar el mouse sobre el nodo */
+.network-node:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    z-index: 30;
 }

@@ -9,6 +9,7 @@
      COMPRAR INVESTIGACIÓN
      ------------------------------------------------------------------------ */
   function buyResearch(researchId) {
+    if (!window.CONFIG || !window.CONFIG.researches) return false;
     const research = window.CONFIG.researches[researchId];
     if (!research) return false;
 
@@ -151,7 +152,7 @@
   function addEmployeeTraining(amount) {
     const before = window.gameState.employeeTraining;
     window.gameState.employeeTraining = Math.min(
-      window.CONFIG.maxEmployeeTraining,
+      window.CONFIG ? window.CONFIG.maxEmployeeTraining : 100,
       window.gameState.employeeTraining + amount,
     );
 
@@ -172,7 +173,7 @@
     const training = window.gameState.employeeTraining;
     return Math.min(
       0.9,
-      (training / 10) * window.CONFIG.eventReductionPerTraining,
+      (training / 10) * window.CONFIG ? window.CONFIG.eventReductionPerTraining : 0.1,
     );
   }
 
