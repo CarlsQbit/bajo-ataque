@@ -764,38 +764,40 @@
     initUI();
     updateMenus();
   });
-  // Añadir al final de js/ui.js o en main.js (deshabilita handlers previos sobre pausa si existen)
-  (function () {
-    // Estado global
-    window.gameState = window.gameState || {};
-    window.gameState.isGameOver = window.gameState.isGameOver || false;
 
-    const gameContainer = document.getElementById("game-container");
-    const pauseOverlay = document.getElementById("pause-overlay");
+  /* ------------------------------------------------------------------------
+     FUNCIONES DE PAUSA Y GAME OVER (movidas del segundo IIFE)
+     ------------------------------------------------------------------------ */
+  // Estado global
+  window.gameState = window.gameState || {};
+  window.gameState.isGameOver = window.gameState.isGameOver || false;
 
-    // Utility: bloquear/permitir eventos de teclado salvo los permitidos
-    function keyboardFilter(e) {
-      // permitir tecla Escape o P para reanudar solo si no es GameOver
-      if (window.gameState.isGameOver) {
-        // en Game Over solo evitar todo (o permitir F5)
+  const gameContainer = document.getElementById("game-container");
+  const pauseOverlay = document.getElementById("pause-overlay");
+
+  // Utility: bloquear/permitir eventos de teclado salvo los permitidos
+  function keyboardFilter(e) {
+    // permitir tecla Escape o P para reanudar solo si no es GameOver
+    if (window.gameState.isGameOver) {
+      // en Game Over solo evitar todo (o permitir F5)
+      e.stopImmediatePropagation();
+      e.preventDefault();
+      return;
+    }
+    // En pausa, permitir solo teclas específicas (p = toggle)
+    if (gameContainer && gameContainer.classList.contains("paused")) {
+      const allowed = ["p", "P", "Escape"];
+      if (!allowed.includes(e.key)) {
         e.stopImmediatePropagation();
         e.preventDefault();
-        return;
-      }
-      // En pausa, permitir solo teclas específicas (p = toggle)
-      if (gameContainer.classList.contains("paused")) {
-        const allowed = ["p", "P", "Escape"];
-        if (!allowed.includes(e.key)) {
-          e.stopImmediatePropagation();
-          e.preventDefault();
-        }
       }
     }
+  }
 
-    // Mostrar overlay en modo (pause | gameover)
-    // Reemplaza la función showOverlay existente por esta:
-    function showOverlay(mode, details) {
-      // mode: 'pause' | 'gameover' | 'victory'
+  // Mostrar overlay en modo (pause | gameover)
+  function showOverlay(mode, details) {
+    // mode: 'pause' | 'gameover' | 'victory'
+    if (pauseOverlay) {
       pauseOverlay.classList.add("overlay", "active");
       pauseOverlay.classList.remove("game-over", "victory-mode");
       pauseOverlay.innerHTML = ""; // limpiar
@@ -859,11 +861,11 @@
       // Keyboard filter ya se instala en el código existente
       document.addEventListener("keydown", keyboardFilter, true);
     }
+  }
 
-    function setVictory(details) {
-      window.gameState = window.gameState || {};
-      window.gameState.isGameOver = true;
-      const gameContainer = document.getElementById("game-container");
+  function setVictory(details) {
+    window.gameState.isGameOver = true;
+    if (gameContainer) {
       gameContainer.classList.add("paused");
       showOverlay("victory", details || "");
       // deshabilitar botones como hace setGameOver
@@ -876,78 +878,80 @@
           el.disabled = true;
         });
     }
-    window.setVictory = setVictory;
+  }
+  window.setVictory = setVictory;
 
-    function hideOverlay() {
+  function hideOverlay() {
+    if (pauseOverlay) {
       pauseOverlay.classList.remove("active", "game-over");
       pauseOverlay.innerHTML = "";
       document.removeEventListener("keydown", keyboardFilter, true);
     }
+  }
 
-    // Poner el juego en pausa / quitar pausa
-    function setPaused(paused) {
-      // Si GameOver, no permitas reanudar
-      if (window.gameState.isGameOver && paused === false) {
-        // no reanudar tras game over
-        return;
-      }
-
-      if (paused) {
-        gameContainer.classList.add("paused");
-        // show overlay with resume
-        showOverlay("pause");
-
-        // Asegurar que botones y controles quedan visualmente deshabilitados por overlay
-        // (el overlay captura eventos; aquí opcionalmente se marcan disabled para estilos)
-        document
-          .querySelectorAll(
-            ".control-btn, .sidebar-btn, .tool-btn, .buy-btn, .event-option-btn",
-          )
-          .forEach((el) => {
-            // En js/ui.js, dentro de setPaused(paused):
-            if (el.id === "btn-resume" || el.id === "btn-pause") return; // <--- Agrega el ID de tu botón principal aquí
-            el.dataset._wasDisabled = el.disabled ? "1" : "0";
-            el.disabled = true;
-          });
-      } else {
-        // quitar pausa si no estamos en game over
-        if (window.gameState.isGameOver) return;
-        gameContainer.classList.remove("paused");
-        hideOverlay();
-
-        // restaurar disabled
-        document
-          .querySelectorAll(
-            ".control-btn, .sidebar-btn, .tool-btn, .buy-btn, .event-option-btn",
-          )
-          .forEach((el) => {
-            if (el.dataset._wasDisabled === "1") el.disabled = true;
-            else el.disabled = false;
-            delete el.dataset._wasDisabled;
-          });
-      }
+  // Poner el juego en pausa / quitar pausa
+  function setPaused(paused) {
+    // Si GameOver, no permitas reanudar
+    if (window.gameState.isGameOver && paused === false) {
+      // no reanudar tras game over
+      return;
     }
 
-    // Llamar cuando quieras marcar Game Over
-    function setGameOver() {
-      window.gameState.isGameOver = true;
-      // Asegurar que el juego quede difuminado e inactivo
-      gameContainer.classList.add("paused");
-      showOverlay("gameover");
+    if (paused) {
+      if (gameContainer) gameContainer.classList.add("paused");
+      // show overlay with resume
+      showOverlay("pause");
 
-      // deshabilitar todos los botones (incluido pause)
+      // Asegurar que botones y controles quedan visualmente deshabilitados por overlay
+      // (el overlay captura eventos; aquí opcionalmente se marcan disabled para estilos)
       document
         .querySelectorAll(
           ".control-btn, .sidebar-btn, .tool-btn, .buy-btn, .event-option-btn",
         )
         .forEach((el) => {
+          // En js/ui.js, dentro de setPaused(paused):
+          if (el.id === "btn-resume" || el.id === "btn-pause") return;
           el.dataset._wasDisabled = el.disabled ? "1" : "0";
           el.disabled = true;
         });
-    }
+    } else {
+      // quitar pausa si no estamos en game over
+      if (window.gameState.isGameOver) return;
+      if (gameContainer) gameContainer.classList.remove("paused");
+      hideOverlay();
 
-    // Exponer funciones globales si las necesitas
-    window.setPaused = setPaused;
-    window.setGameOver = setGameOver;
-  })();
+      // restaurar disabled
+      document
+        .querySelectorAll(
+          ".control-btn, .sidebar-btn, .tool-btn, .buy-btn, .event-option-btn",
+        )
+        .forEach((el) => {
+          if (el.dataset._wasDisabled === "1") el.disabled = true;
+          else el.disabled = false;
+          delete el.dataset._wasDisabled;
+        });
+    }
+  }
+
+  // Llamar cuando quieras marcar Game Over
+  function setGameOver() {
+    window.gameState.isGameOver = true;
+    // Asegurar que el juego quede difuminado e inactivo
+    if (gameContainer) gameContainer.classList.add("paused");
+    showOverlay("gameover");
+
+    // deshabilitar todos los botones (incluido pause)
+    document
+      .querySelectorAll(
+        ".control-btn, .sidebar-btn, .tool-btn, .buy-btn, .event-option-btn",
+      )
+      .forEach((el) => {
+        el.dataset._wasDisabled = el.disabled ? "1" : "0";
+        el.disabled = true;
+      });
+  }
+
+  // Exponer funciones globales
+  window.setPaused = setPaused;
+  window.setGameOver = setGameOver;
 })();

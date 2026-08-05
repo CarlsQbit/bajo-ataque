@@ -291,12 +291,20 @@
 
         <script src="js/economy.js"></script>
         <script src="js/research.js"></script>
-        <script src="js/main.js"></script>
-        <script src="js/events.js"></script>
         <script src="js/network-config.js"></script>
         <script src="js/network-nodes.js"></script>
         <script src="js/network-cables.js"></script>
         <script src="js/network.js"></script>
+        <script src="js/camera.js"></script>
+        <script src="js/events.js"></script>
         <script src="js/ui.js"></script>
+        <script src="js/main.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                if (typeof window.initGame === 'function') window.initGame();
+                if (typeof window.initUI === 'function') window.initUI();
+                if (typeof window.initNetwork === 'function') window.initNetwork();
+            });
+        </script>
     </body>
 </html>
