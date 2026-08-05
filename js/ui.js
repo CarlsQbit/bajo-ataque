@@ -856,23 +856,69 @@
         const resume = document.createElement("button");
         resume.id = "btn-resume";
         resume.className = "control-btn";
-        resume.textContent = "Reanudar";
+        resume.textContent = "Continuar";
         resume.onclick = () => {
           if (window.gameState?.isGameOver) return;
           setPaused(false);
         };
         buttons.appendChild(resume);
-      } else {
-        // gameover o victory => mostrar botón reiniciar
-        const restart = document.createElement("button");
-        restart.id = "btn-restart";
-        restart.className = "control-btn";
-        restart.textContent = "Reiniciar";
-        restart.onclick = () => {
-          if (typeof window.restartGame === "function") window.restartGame();
-          else window.location.reload();
+
+        const glossaryBtn = document.createElement("button");
+        glossaryBtn.className = "control-btn";
+        glossaryBtn.textContent = "Glosario";
+        glossaryBtn.onclick = () => {
+          if (typeof window.openGlossaryModal === "function") {
+            window.openGlossaryModal();
+          }
         };
-        buttons.appendChild(restart);
+        buttons.appendChild(glossaryBtn);
+
+        const menuBtn = document.createElement("button");
+        menuBtn.className = "control-btn";
+        menuBtn.textContent = "Menú Principal";
+        menuBtn.onclick = () => {
+          if (typeof window.returnToMenu === "function") {
+            window.returnToMenu();
+          } else {
+            window.location.reload();
+          }
+        };
+        buttons.appendChild(menuBtn);
+      } else {
+        // gameover o victory => mostrar botones de nuevo juego, glosario y menú principal
+        const newGameBtn = document.createElement("button");
+        newGameBtn.className = "control-btn";
+        newGameBtn.textContent = "Nuevo Juego";
+        newGameBtn.onclick = () => {
+          if (typeof window.restartGame === "function") {
+            window.restartGame();
+          } else {
+            window.location.reload();
+          }
+        };
+        buttons.appendChild(newGameBtn);
+
+        const glossaryBtn = document.createElement("button");
+        glossaryBtn.className = "control-btn";
+        glossaryBtn.textContent = "Glosario";
+        glossaryBtn.onclick = () => {
+          if (typeof window.openGlossaryModal === "function") {
+            window.openGlossaryModal();
+          }
+        };
+        buttons.appendChild(glossaryBtn);
+
+        const menuBtn = document.createElement("button");
+        menuBtn.className = "control-btn";
+        menuBtn.textContent = "Menú Principal";
+        menuBtn.onclick = () => {
+          if (typeof window.returnToMenu === "function") {
+            window.returnToMenu();
+          } else {
+            window.location.reload();
+          }
+        };
+        buttons.appendChild(menuBtn);
       }
 
       panel.appendChild(buttons);
@@ -971,7 +1017,22 @@
       });
   }
 
+  // Función para volver al menú principal
+  function returnToMenu() {
+    const menuScreen = document.getElementById("menu-screen");
+    if (menuScreen) {
+      menuScreen.style.display = "block";
+    }
+    // Reiniciar el juego
+    if (typeof window.restartGame === "function") {
+      window.restartGame();
+    } else {
+      window.location.reload();
+    }
+  }
+
   // Exponer funciones globales
   window.setPaused = setPaused;
   window.setGameOver = setGameOver;
+  window.returnToMenu = returnToMenu;
 })();

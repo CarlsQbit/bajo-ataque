@@ -1291,3 +1291,180 @@ body.submenu-open #workspace {
 .node-icon {
     margin-bottom: 0 !important;
 }
+
+/* ===== MENÚ PRINCIPAL ===== */
+#menu-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: #e2e8f0;
+}
+
+.menu-container {
+    text-align: center;
+    max-width: 400px;
+    padding: 2rem;
+    background: rgba(15, 23, 42, 0.9);
+    border-radius: 16px;
+    border: 2px solid #3b82f6;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.menu-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #f8fafc;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.menu-subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin-bottom: 2rem;
+}
+
+.menu-input-group {
+    margin-bottom: 2rem;
+}
+
+.menu-input-group input {
+    padding: 10px 16px;
+    width: 200px;
+    border: 2px solid #3b82f6;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #e2e8f0;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.menu-input-group input:focus {
+    outline: none;
+    border-color: #60a5fa;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.menu-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 200px;
+}
+
+.menu-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* ===== MODAL DE PUNTUACIONES ===== */
+.scores-content {
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.scores-content h2 {
+    margin-bottom: 1rem;
+    color: #f8fafc;
+}
+
+#scores-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+#scores-table th,
+#scores-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #334155;
+}
+
+#scores-table th {
+    background: #1e293b;
+    color: #94a3b8;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+}
+
+#scores-table tr:hover {
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* ===== OVERLAY DE PAUSA/GAME OVER/VICTORIA (MEJORADO) ===== */
+#pause-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(8px); /* Efecto de desenfoque */
+}
+
+#pause-overlay.active {
+    display: flex;
+}
+
+.pause-panel {
+    background: rgba(15, 23, 42, 0.95);
+    border: 2px solid #3b82f6;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    max-width: 400px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.pause-text,
+.game-over-text,
+.victory-text {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+}
+
+.game-over-text {
+    color: #ef4444;
+}
+
+.victory-text {
+    color: #22c55e;
+}
+
+.pause-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 1.5rem;
+}
+
+.pause-buttons .control-btn {
+    width: 200px;
+    padding: 10px;
+}

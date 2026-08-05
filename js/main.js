@@ -1114,6 +1114,10 @@ function checkVictory() {
     if (typeof window.setVictory === "function") {
       window.setVictory(details);
     }
+    // Guardar puntuación
+    if (typeof window.saveVictoryScore === "function") {
+      window.saveVictoryScore(gameState.day, connectedCount);
+    }
 
     const overlay = document.getElementById("pause-overlay");
     if (overlay) {
@@ -1160,6 +1164,72 @@ window.nextServerName = nextServerName;
    ARRANQUE
    ---- */
 document.addEventListener("DOMContentLoaded", initGame);
+
+/* ----
+   REINICIAR JUEGO (sin tutorial)
+   ---- */
+function restartGame() {
+  // Reiniciar el estado del juego
+  gameState.money = CONFIG.startingMoney;
+  gameState.intelPoints = CONFIG.startingIntel;
+  gameState.health = CONFIG.startingHealth;
+  gameState.maxHealth = CONFIG.maxHealth;
+  gameState.employeeTraining = 0;
+  gameState.day = 1;
+  gameState.week = 1;
+  gameState.weekday = 0;
+  gameState.isPaused = true;
+  gameState.isEditMode = true;
+  gameState.speed = 0;
+  gameState.selectedTool = null;
+  gameState.nodes = [];
+  gameState.connections = [];
+  gameState.researches = [];
+  gameState.loans = [];
+  gameState.activeThreats = [];
+  gameState.defenses = [];
+  gameState.eventActive = false;
+  gameState.phishingBonus = 0;
+  gameState.phishingBonusExpiresDay = null;
+  gameState.totalPacketsDelivered = 0;
+  gameState.totalMoneyEarned = 0;
+  gameState.gameOver = false;
+  gameState.eventStartTime = null;
+
+  // Limpiar el workspace
+  const workspace = document.getElementById("workspace");
+  if (workspace) {
+    const mapContainer = document.getElementById("map-container");
+    if (mapContainer) {
+      mapContainer.innerHTML = "";
+    }
+  }
+
+  // Reiniciar el HUD
+  if (typeof window.updateHUD === "function") window.updateHUD();
+  if (typeof window.updateNetworkHealth === "function") window.updateNetworkHealth();
+  if (typeof window.updateTrainingBar === "function") window.updateTrainingBar();
+
+  // Volver a mostrar el menú principal
+  const menuScreen = document.getElementById("menu-screen");
+  if (menuScreen) {
+    menuScreen.style.display = "block";
+  }
+
+  // Ocultar el juego
+  const gameContainer = document.getElementById("game-container");
+  if (gameContainer) {
+    gameContainer.style.display = "none";
+  }
+
+  // Inicializar el juego de nuevo (sin tutorial automático)
+  initGame();
+  initUI();
+  initNetwork();
+}
+
+// Exponer la función globalmente
+window.restartGame = restartGame;
 
 /* ----
    VICTORIA
