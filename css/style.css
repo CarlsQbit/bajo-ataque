@@ -1108,3 +1108,101 @@ body.submenu-open #workspace {
     white-space: nowrap;
     z-index: 30;
 }
+/* ===== MEJORAS PARA TEXTO EN NODOS ===== */
+
+/* Aumentar tamaño de nodos para más espacio */
+.network-node {
+    width: 100px !important;
+    height: 100px !important;
+}
+
+.node-endpoint {
+    width: 80px !important;
+    height: 80px !important;
+}
+
+/* Posicionar el texto DEBAJO del nodo (fuera del círculo) */
+.node-name {
+    position: absolute !important;
+    bottom: -25px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    font-size: 0.85rem !important;
+    font-weight: bold !important;
+    color: #0f172a !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    white-space: nowrap !important;
+    text-shadow: none !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Posicionar los puertos DEBAJO del nombre */
+.node-ports {
+    position: absolute !important;
+    bottom: -40px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    font-size: 0.8rem !important;
+    font-weight: bold !important;
+    color: #0f172a !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ajustar el icono para que no tape el texto */
+.node-icon {
+    margin-bottom: 0 !important;
+}
+/* ===== CORRECCIÓN DE SOMBREADO AL ARRASTRAR NODOS ===== */
+
+/* Reemplazar box-shadow con filter: drop-shadow() (sigue la forma del círculo) */
+.network-node.dragging {
+    transform: scale(1.05) !important;
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3)) !important;
+    box-shadow: none !important;
+    z-index: 20 !important;
+}
+
+/* Asegurar que el outline (si existe) también siga la forma */
+.network-node:focus,
+.network-node:active {
+    outline: none !important;
+}
+
+/* Ajustar el cursor para que sea más claro */
+.network-node {
+    cursor: grab !important;
+}
+
+.network-node:active,
+.network-node.dragging {
+    cursor: grabbing !important;
+}
+/* ===== EVITAR SUPERPOSICIÓN DE TEXTO ===== */
+
+/* Añadir margen inferior al nodo para el texto */
+.network-node {
+    margin-bottom: 50px !important;
+}
+
+/* Asegurar que el texto siempre esté encima de otros elementos */
+.node-name,
+.node-ports {
+    z-index: 30 !important;
+    pointer-events: none !important; /* Evitar que el texto interfiera con el clic */
+}
+
+/* Ajustar posición de los switches y endpoints para que el texto no quede demasiado abajo */
+.node-switch8,
+.node-switch16,
+.node-switch24 {
+    margin-bottom: 50px !important;
+}
+
+.node-endpoint {
+    margin-bottom: 45px !important;
+}
