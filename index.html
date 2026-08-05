@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bajo Ataque</title>
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <div id="game-container">
+            <header id="top-bar">
+                <div class="hud-section">
+                    <span class="hud-label">Salud de red</span>
+                    <div id="health-bar-container" class="bar-container">
+                        <div
+                            id="health-fill"
+                            class="bar-fill"
+                            style="width: 100%"
+                        ></div>
+                        <span id="health-text" class="bar-text">100%</span>
+                    </div>
+                </div>
+
+                <div class="hud-section">
+                    <span class="hud-label">Capacitación</span>
+                    <div id="training-bar-container" class="bar-container">
+                        <div
+                            id="training-fill"
+                            class="bar-fill"
+                            style="width: 0%"
+                        ></div>
+                        <span id="training-text" class="bar-text">0%</span>
+                    </div>
+                </div>
+
+                <div class="hud-section">
+                    <span class="hud-label">Dinero</span>
+                    <span id="money-display" class="hud-value">$500</span>
+                </div>
+
+                <div class="hud-section">
+                    <span class="hud-label">PI</span>
+                    <span id="intel-display" class="hud-value">5</span>
+                </div>
+
+                <div class="hud-section">
+                    <span class="hud-label">Tiempo</span>
+                    <span id="time-display" class="hud-value">Sem 1 - Lun</span>
+                </div>
+
+                <div id="top-controls">
+                    <button id="btn-pause" class="control-btn">Pausar</button>
+                    <button id="btn-speed-normal" class="control-btn active">
+                        x1
+                    </button>
+                    <button id="btn-speed-fast" class="control-btn">x2</button>
+                </div>
+            </header>
+
+            <main id="workspace">
+                <!-- Overlay de pausa (fuera del mapa para que no se mueva) -->
+                <div id="pause-overlay">
+                    <div class="pause-text">Juego Pausado</div>
+                </div>
+
+                <!-- Contenedor del mapa (se puede desplazar y hace pan) -->
+                <div id="map-container">
+                    <svg
+                        id="connections-layer"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="100%"
+                        height="100%"
+                    ></svg>
+                    <div id="packets-layer"></div>
+
+                    <!-- Nodos iniciales — posición fija en JS (positionInitialNodes) -->
+                    <div
+                        id="router"
+                        class="network-node node-router"
+                        data-type="router"
+                        style="position: absolute; left: 0; top: 0"
+                    >
+                        <div class="node-icon"></div>
+                        <div class="node-name">Router Principal</div>
+                        <div class="node-ports">
+                            <span class="port-count">0</span>/<span
+                                class="port-max"
+                                >8</span
+                            >
+                        </div>
+                        <div class="node-status"></div>
+                    </div>
+                    <div
+                        id="ceo-station"
+                        class="network-node node-endpoint"
+                        data-type="endpoint"
+                        style="position: absolute; left: 0; top: 0"
+                    >
+                        <div class="node-icon"></div>
+                        <div class="node-name">PC CEO</div>
+                        <div class="node-ports">
+                            <span class="port-count">0</span>/<span
+                                class="port-max"
+                                >1</span
+                            >
+                        </div>
+                        <div class="node-status"></div>
+                    </div>
+                    <div
+                        id="qa-station"
+                        class="network-node node-endpoint"
+                        data-type="endpoint"
+                        style="position: absolute; left: 0; top: 0"
+                    >
+                        <div class="node-icon"></div>
+                        <div class="node-name">PC QA</div>
+                        <div class="node-ports">
+                            <span class="port-count">0</span>/<span
+                                class="port-max"
+                                >1</span
+                            >
+                        </div>
+                        <div class="node-status"></div>
+                    </div>
+                </div>
+            </main>
+            <nav id="sidebar">
+                <button
+                    class="sidebar-btn"
+                    data-target="menu-media"
+                    title="Cableado"
+                >
+                    🔌
+                </button>
+                <button
+                    class="sidebar-btn"
+                    data-target="menu-switches"
+                    title="Switches"
+                >
+                    🖧
+                </button>
+                <button
+                    class="sidebar-btn"
+                    data-target="menu-research"
+                    title="Investigaciones"
+                >
+                    🔬
+                </button>
+                <button
+                    class="sidebar-btn"
+                    data-target="menu-loans"
+                    title="Préstamos"
+                >
+                    💰
+                </button>
+                <button
+                    class="sidebar-btn"
+                    data-target="menu-glossary"
+                    title="Glosario"
+                >
+                    📖
+                </button>
+            </nav>
+
+            <aside id="menu-media" class="submenu-panel">
+                <h2 class="submenu-title">Cableado</h2>
+                <p class="modal-text">
+                    Selecciona un tipo de cable y arrastra entre puertos.
+                </p>
+                <div id="media-list"></div>
+            </aside>
+
+            <aside id="menu-switches" class="submenu-panel">
+                <h2 class="submenu-title">Switches</h2>
+                <p class="modal-text">Compra switches para expandir la red.</p>
+                <div id="switches-list"></div>
+            </aside>
+
+            <aside id="menu-research" class="submenu-panel">
+                <h2 class="submenu-title">Investigaciones</h2>
+                <p class="modal-text">
+                    Mejora tecnología, capacitación y defensas.
+                </p>
+                <div id="research-list"></div>
+            </aside>
+
+            <aside id="menu-loans" class="submenu-panel">
+                <h2 class="submenu-title">Préstamos</h2>
+                <p class="modal-text">
+                    Obtén dinero rápido con penalización de ingresos.
+                </p>
+                <div id="loans-list"></div>
+            </aside>
+
+            <aside id="menu-glossary" class="submenu-panel">
+                <h2 class="submenu-title">Glosario</h2>
+                <div id="glossary-list-normal"></div>
+            </aside>
+
+            <div id="welcome-screen">
+                <div class="welcome-card">
+                    <h1>Bajo Ataque</h1>
+                    <p>
+                        Eres el nuevo administrador de red de una recien creada
+                        empresa en crecimiento. Construye infraestructura,
+                        protege los datos, capacita al personal y toma
+                        decisiones bajo presión. ¿Podrás mantener la red
+                        saludable?
+                    </p>
+                    <button id="btn-start-game" class="control-btn active">
+                        Comenzar
+                    </button>
+                </div>
+            </div>
+
+            <div id="tutorial-card">
+                <h3 id="tutorial-title">Bienvenido</h3>
+                <p id="tutorial-text">Texto del tutorial...</p>
+                <div class="tutorial-buttons">
+                    <button id="btn-skip-tutorial" class="tutorial-btn">
+                        Omitir
+                    </button>
+                    <button id="btn-next-tutorial" class="tutorial-btn">
+                        Siguiente
+                    </button>
+                </div>
+            </div>
+
+            <div id="event-modal" class="modal">
+                <div class="modal-content">
+                    <h2 id="event-title" class="modal-title">Evento</h2>
+                    <div
+                        id="event-timer"
+                        style="
+                            font-size: 1.1rem;
+                            font-weight: bold;
+                            color: #f87171;
+                            margin-bottom: 8px;
+                        "
+                    >
+                        ⏱ 15s
+                    </div>
+                    <p id="event-description" class="modal-text">
+                        Descripción del evento...
+                    </p>
+                    <div id="event-options"></div>
+                    <div id="event-feedback" class="event-feedback"></div>
+                </div>
+            </div>
+
+            <div id="sell-modal" class="modal">
+                <div class="modal-content">
+                    <h2 id="sell-title" class="modal-title">Vender equipo</h2>
+                    <p id="sell-description" class="modal-text">
+                        ¿Seguro que quieres vender?
+                    </p>
+                    <div class="modal-buttons">
+                        <button
+                            id="btn-cancel-sell"
+                            class="modal-btn modal-btn-secondary"
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            id="btn-confirm-sell"
+                            class="modal-btn modal-btn-primary"
+                        >
+                            Vender
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="glossary-modal" class="modal">
+                <div class="modal-content">
+                    <h2 class="modal-title">Glosario de términos</h2>
+                    <div id="glossary-list-paused"></div>
+                    <div class="modal-buttons">
+                        <button
+                            id="btn-close-glossary-modal"
+                            class="modal-btn modal-btn-secondary"
+                        >
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="notification-area"></div>
+        </div>
+
+        <script src="js/economy.js"></script>
+        <script src="js/research.js"></script>
+        <script src="js/main.js"></script>
+        <script src="js/events.js"></script>
+        <script src="js/network-config.js"></script>
+        <script src="js/network-nodes.js"></script>
+        <script src="js/network-cables.js"></script>
+        <script src="js/network.js"></script>
+        <script src="js/ui.js"></script>
+    </body>
+</html>
