@@ -1206,3 +1206,91 @@ body.submenu-open #workspace {
 .node-endpoint {
     margin-bottom: 45px !important;
 }
+/* ===== MEJORAS VISUALES PARA NODOS ===== */
+
+/* Tamaño de nodos (un poco más grandes para mejor legibilidad) */
+.network-node {
+    width: 85px;
+    height: 85px;
+}
+
+.node-endpoint {
+    width: 65px;
+    height: 65px;
+}
+
+/* Nombre del nodo: DEBAJO del círculo */
+.node-name {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #1e293b;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 30;
+    pointer-events: none;
+}
+
+/* Puertos: DENTRO del nodo (formato "Puertos\n1/8") */
+.node-ports {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: #1e293b;
+    text-align: center;
+    white-space: pre-line;
+    background: transparent;
+    padding: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Ajustar el icono para que no tape los puertos */
+.node-icon {
+    margin-bottom: 4px;
+}
+
+/* ===== CORRECCIÓN DE SOMBREADO AL ARRASTRAR ===== */
+
+/* Eliminar box-shadow por defecto (evita el rectángulo sombreado al hover) */
+.network-node {
+    box-shadow: none;
+}
+
+/* Usar filter: drop-shadow() para el efecto de arrastrar (sigue la forma redonda) */
+.network-node.dragging {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
+    z-index: 20;
+}
+
+/* Asegurar que el outline no aparezca */
+.network-node:focus,
+.network-node:active {
+    outline: none;
+}
+
+/* Cursor claro */
+.network-node {
+    cursor: grab;
+}
+
+.network-node:active,
+.network-node.dragging {
+    cursor: grabbing;
+}
+
+/* Eliminar cualquier efecto de hover no deseado */
+.network-node:hover {
+    box-shadow: none !important;
+    outline: none !important;
+    border: none !important;
+}

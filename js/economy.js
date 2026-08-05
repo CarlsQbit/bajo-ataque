@@ -31,12 +31,14 @@
     window.gameState.money += total;
     window.gameState.totalMoneyEarned += total;
     if (typeof window.updateMoneyUI === "function") window.updateMoneyUI();
+    if (typeof window.renderResearchMenu === "function") window.renderResearchMenu();
     return total;
   }
 
   function applyMoneyPenalty(amount) {
     window.gameState.money = Math.max(0, window.gameState.money - amount);
     if (typeof window.updateMoneyUI === "function") window.updateMoneyUI();
+    if (typeof window.renderResearchMenu === "function") window.renderResearchMenu();
   }
 
   function applyHealthDamage(percentage) {
