@@ -163,6 +163,7 @@
       return;
     }
     window.applyMoneyPenalty(config.cost);
+    if (typeof window.updateHUD === "function") window.updateHUD();
     const workspace = document.getElementById("workspace");
     const x = workspace.clientWidth / 2 - 40 + (Math.random() - 0.5) * 100;
     const y = workspace.clientHeight / 2 - 40 + (Math.random() - 0.5) * 100;

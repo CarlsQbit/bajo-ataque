@@ -5,6 +5,15 @@
    ========================================================================== */
 
 (function () {
+
+  // Función para actualizar todos los menús de compra
+  function updateAllBuyMenus() {
+    if (typeof window.renderResearchMenu === "function") window.renderResearchMenu();
+    if (typeof window.renderBuildMenu === "function") window.renderBuildMenu();
+    if (typeof window.renderLoansMenu === "function") window.renderLoansMenu();
+    if (typeof window.renderCableTools === "function") window.renderCableTools();
+  }
+
   /* ------------------------------------------------------------------------
      RECOMPENSAS Y DAÑOS VARIABLES
      ------------------------------------------------------------------------ */
@@ -31,14 +40,14 @@
     window.gameState.money += total;
     window.gameState.totalMoneyEarned += total;
     if (typeof window.updateMoneyUI === "function") window.updateMoneyUI();
-    if (typeof window.renderResearchMenu === "function") window.renderResearchMenu();
+    if (typeof updateAllBuyMenus === "function") updateAllBuyMenus();
     return total;
   }
 
   function applyMoneyPenalty(amount) {
     window.gameState.money = Math.max(0, window.gameState.money - amount);
     if (typeof window.updateMoneyUI === "function") window.updateMoneyUI();
-    if (typeof window.renderResearchMenu === "function") window.renderResearchMenu();
+    if (typeof updateAllBuyMenus === "function") updateAllBuyMenus();
   }
 
   function applyHealthDamage(percentage) {
@@ -61,6 +70,7 @@
   function addIntelPoints(amount) {
     window.gameState.intelPoints += amount;
     if (typeof window.updateHUD === "function") window.updateHUD();
+    if (typeof updateAllBuyMenus === "function") updateAllBuyMenus();
   }
 
   /* ------------------------------------------------------------------------
@@ -113,6 +123,7 @@
     window.gameState.loans.push(loan);
     window.gameState.money += loanConfig.amount;
     if (typeof window.updateMoneyUI === "function") window.updateMoneyUI();
+    if (typeof window.updateAllBuyMenus === "function") window.updateAllBuyMenus();
     if (typeof window.showNotification === "function") {
       window.showNotification(
         `${loanConfig.name} aprobado: +$${loanConfig.amount}`,
@@ -139,6 +150,7 @@
 
     window.gameState.money -= remaining;
     loan.paid = loan.totalOwed;
+    if (typeof window.updateAllBuyMenus === "function") window.updateAllBuyMenus();
     window.gameState.loans = window.gameState.loans.filter(
       (l) => l.id !== loanId,
     );

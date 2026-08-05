@@ -386,6 +386,17 @@ function loop(now) {
    AVANCE DEL TIEMPO
    ---- */
 function advanceDay() {
+  // Forzar cierre de evento si está activo por más de 20 segundos (seguridad)
+  if (gameState.eventActive && gameState.eventStartTime) {
+    const now = Date.now();
+    const eventDuration = now - gameState.eventStartTime;
+    if (eventDuration > 20000) { // 20 segundos
+      gameState.eventActive = false;
+      if (typeof window.showNotification === "function") {
+        window.showNotification("Evento cancelado por tiempo de espera.", "warning");
+      }
+    }
+  }
   if (gameState.isPaused || gameState.eventActive || gameState.gameOver) return;
 
   gameState.day++;

@@ -49,6 +49,7 @@
       return null;
     }
     window.applyMoneyPenalty(cableCost);
+    if (typeof window.updateHUD === "function") window.updateHUD();
 
     const fromPort = fromNode.connections;
     const toPort = toNode.connections;

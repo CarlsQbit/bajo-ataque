@@ -40,6 +40,10 @@
     window.gameState.intelPoints -= research.costIntel;
     window.gameState.researches.push(researchId);
 
+    // Actualizar menús y HUD
+    if (typeof window.updateAllBuyMenus === "function") window.updateAllBuyMenus();
+    if (typeof window.updateHUD === "function") window.updateHUD();
+
     // Aplicar efecto inmediato
     if (research.effect && research.effect.training) {
       addEmployeeTraining(research.effect.training);

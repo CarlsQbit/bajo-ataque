@@ -200,6 +200,7 @@
     });
 
     modal.style.display = "flex";
+    window.gameState.eventStartTime = Date.now(); // Registrar inicio del evento
 
     // Contador visual y temporizador de respuesta
     let totalSeconds = 10;
