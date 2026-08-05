@@ -1204,22 +1204,7 @@ body.submenu-open #workspace {
     height: 65px;
 }
 
-/* Nombre del nodo: DEBAJO del círculo */
-.node-name {
-    position: absolute;
-    bottom: -22px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #1e293b;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap;
-    z-index: 30;
-    pointer-events: none;
-}
+
 
 /* Puertos: DENTRO del nodo (formato "Puertos\n1/8") */
 .node-ports {
@@ -1238,20 +1223,7 @@ body.submenu-open #workspace {
     pointer-events: none;
 }
 
-/* Ajustar el icono para que no tape los puertos */
-.node-icon {
-    margin-bottom: 4px;
-}
-
-/* ===== CORRECCIÓN DE SOMBREADO AL ARRASTRAR ===== */
-
-/* Eliminar box-shadow por defecto (evita el rectángulo sombreado al hover) */
-.network-node {
-    box-shadow: none;
-}
-
-/* Usar filter: drop-shadow() para el efecto de arrastrar (sigue la forma redonda) */
-.network-node.dragging {
+/dragging {
     transform: scale(1.05);
     filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.3));
     z-index: 20;
@@ -1278,4 +1250,44 @@ body.submenu-open #workspace {
     box-shadow: none !important;
     outline: none !important;
     border: none !important;
+}
+
+/* ===== TEXTO EN NODOS (Nombre abajo, puertos adentro) ===== */
+
+/* Nombre del nodo: DEBAJO del círculo */
+.node-name {
+    position: absolute;
+    bottom: -22px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #1e293b;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 30;
+    pointer-events: none;
+}
+
+/* Puertos: DENTRO del nodo (ej: "1/8") */
+.node-ports {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #1e293b;
+    text-align: center;
+    background: transparent;
+    padding: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Ajustar el icono para que no tape los puertos */
+.node-icon {
+    margin-bottom: 0 !important;
 }
