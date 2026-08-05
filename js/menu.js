@@ -160,4 +160,11 @@
   window.saveVictoryScore = saveVictoryScore;
   window.loadScores = loadScores;
   window.renderScoresTable = renderScoresTable;
+
+  // Inicializar automáticamente cuando el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMenu);
+  } else {
+    initMenu();
+  }
 })();
