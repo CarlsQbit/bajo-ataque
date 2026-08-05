@@ -13,6 +13,9 @@
   let tutorialStep = 0;
   let tutorialHighlight = null;
 
+  // Asegurar que window.gameState exista
+  window.gameState = window.gameState || {};
+
   /* ------------------------------------------------------------------------
      INICIALIZACIÓN
      ------------------------------------------------------------------------ */
@@ -41,7 +44,7 @@
 
         // Glosario: comportamiento especial
         if (targetId === "menu-glossary") {
-          if (window.gameState.isPaused) {
+          if (window.gameState && window.gameState.isPaused) {
             openGlossaryModal();
           } else {
             toggleSubmenu("menu-glossary");
@@ -756,14 +759,6 @@
   window.renderCableTools = renderCableTools;
   window.openGlossaryModal = openGlossaryModal;
   window.closeGlossaryModal = closeGlossaryModal;
-
-  /* ------------------------------------------------------------------------
-     ARRANQUE
-     ------------------------------------------------------------------------ */
-  document.addEventListener("DOMContentLoaded", () => {
-    initUI();
-    updateMenus();
-  });
 
   /* ------------------------------------------------------------------------
      FUNCIONES DE PAUSA Y GAME OVER (movidas del segundo IIFE)
