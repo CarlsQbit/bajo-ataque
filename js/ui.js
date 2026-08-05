@@ -154,7 +154,22 @@
   function startTutorial() {
     tutorialStep = 0;
     const card = document.getElementById("tutorial-card");
-    if (card) card.style.display = "block";
+    if (card) {
+      card.style.display = "block";
+      // Añadir botón de cerrar
+      const closeBtn = document.createElement("button");
+      closeBtn.innerHTML = "&times;";
+      closeBtn.className = "tutorial-close-btn";
+      closeBtn.style.position = "absolute";
+      closeBtn.style.top = "5px";
+      closeBtn.style.right = "5px";
+      closeBtn.style.background = "none";
+      closeBtn.style.border = "none";
+      closeBtn.style.fontSize = "1.2rem";
+      closeBtn.style.cursor = "pointer";
+      closeBtn.onclick = endTutorial;
+      card.appendChild(closeBtn);
+    }
 
     // Pausar durante el tutorial
     window.setPause(true);
@@ -813,6 +828,16 @@
           : mode === "victory"
             ? "🏆 ¡VICTORIA!"
             : "JUEGO PAUSADO";
+
+      // Mostrar información adicional en pausa
+      if (mode === "pause" && window.gameState) {
+        const info = document.createElement("div");
+        info.style.marginTop = "8px";
+        info.style.fontSize = "0.9rem";
+        info.style.color = "#94a3b8";
+        info.textContent = `Día ${window.gameState.day} - Semana ${window.gameState.week} | Salud: ${Math.round(window.gameState.health)}%`;
+        panel.appendChild(info);
+      }
       panel.appendChild(text);
 
       if (details && typeof details === "string") {

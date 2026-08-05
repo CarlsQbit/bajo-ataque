@@ -1105,11 +1105,15 @@ function checkVictory() {
   if (hasEnoughTime && hasEnoughNodes) {
     gameState.gameOver = true;
     setPause(true);
+    const details = `¡Ganaste en ${gameState.day} días con ${connectedCount} nodos conectados!`;
     showNotification(
       `🏆 ¡VICTORIA! Administraste una red de ${connectedCount} nodos durante más de 3 meses. ¡Eres un Network Admin profesional!`,
       "success",
       15000,
     );
+    if (typeof window.setVictory === "function") {
+      window.setVictory(details);
+    }
 
     const overlay = document.getElementById("pause-overlay");
     if (overlay) {
