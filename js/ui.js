@@ -525,7 +525,11 @@
 
   function openGlossaryModal() {
     const modal = document.getElementById("glossary-modal");
-    if (modal) modal.style.display = "flex";
+    if (modal) {
+      modal.style.display = "flex";
+      // Asegurar que el glosario esté renderizado
+      renderGlossaryList("glossary-list-paused");
+    }
   }
 
   function closeGlossaryModal() {
@@ -774,6 +778,7 @@
   window.renderCableTools = renderCableTools;
   window.openGlossaryModal = openGlossaryModal;
   window.closeGlossaryModal = closeGlossaryModal;
+  window.setupGlossary = setupGlossary;
 
   /* ------------------------------------------------------------------------
      FUNCIONES DE PAUSA Y GAME OVER (movidas del segundo IIFE)

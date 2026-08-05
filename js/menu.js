@@ -132,8 +132,18 @@
     const btnGlossary = document.getElementById("btn-glossary-menu");
     if (btnGlossary) {
       btnGlossary.onclick = () => {
+        // Cargar el glosario y abrir el modal
+        if (typeof window.setupGlossary === "function") {
+          window.setupGlossary();
+        }
         if (typeof window.openGlossaryModal === "function") {
           window.openGlossaryModal();
+        } else {
+          // Fallback: abrir modal directamente
+          const glossaryModal = document.getElementById("glossary-modal");
+          if (glossaryModal) {
+            glossaryModal.style.display = "flex";
+          }
         }
       };
     }
